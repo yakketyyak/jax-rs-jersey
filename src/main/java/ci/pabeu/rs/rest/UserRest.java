@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -34,7 +35,7 @@ public class UserRest {
 	@GET()
 	@Path("/")
 	@Produces(value = {MediaType.APPLICATION_JSON})
-	public List<UserDto> get(@Context HttpServletRequest req) throws ParseException {
+	public List<UserDto> getAll(@Context HttpServletRequest req) throws ParseException {
 		
 		EntityManager em = jpa.getEntityManager();
 		String query = "SELECT u FROM User u";
@@ -43,6 +44,18 @@ public class UserRest {
 		List<User> users = em.createQuery(query, User.class).getResultList();
 		em.close();
 		return UserTransformer.INSTANCE.toDtos(users);
+	}
+
+	@GET()
+	@Path("/{id}")
+	@Produces(value = { MediaType.APPLICATION_JSON })
+	public UserDto get(@Context HttpServletRequest req, @PathParam(value = "id") Integer id) throws ParseException {
+
+		EntityManager em = jpa.getEntityManager();
+
+		User user = em.find(User.class, id);
+		em.close();
+		return UserTransformer.INSTANCE.toDto(user);
 	}
 
 }
