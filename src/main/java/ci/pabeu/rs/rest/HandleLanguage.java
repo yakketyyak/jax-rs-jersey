@@ -20,6 +20,8 @@ public class HandleLanguage implements Serializable {
 		if (locale == null) {
 			locale = new Locale(defaultLanguage);
 		}
+
+		Locale.setDefault(locale);
 		return locale;
 	}
 

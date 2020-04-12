@@ -23,9 +23,12 @@ public class UserRest {
 
 	private HandleLanguage handleLanguage;
 	
+	private I18nConfig i18nConfig;
+
 	public UserRest() {
 		jpa = new JpaEntityManager();
 		handleLanguage = new HandleLanguage();
+		i18nConfig = new I18nConfig();
 	}
 
 	@GET()
@@ -35,7 +38,7 @@ public class UserRest {
 		
 		EntityManager em = jpa.getEntityManager();
 		String query = "SELECT u FROM User u";
-		System.out.println("handleLanguage " + handleLanguage.getLang(req));
+		System.out.println("resource bundle " + i18nConfig.getMessage("how_are_you"));
 		
 		List<User> users = em.createQuery(query, User.class).getResultList();
 		em.close();
