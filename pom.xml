@@ -98,7 +98,7 @@
 	
 	</dependencies>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/main/java</sourceDirectory>
     <finalName>jersey-rs</finalName>
     <plugins>
       <plugin>
