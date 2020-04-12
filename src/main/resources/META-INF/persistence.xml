@@ -5,7 +5,7 @@
 	
 	<persistence-unit name="app_crud">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>ci.pabeu.rs.entity.User</class>
+		<class>ci.pabeu.rs.dao.entity.User</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/jax_rs" />
