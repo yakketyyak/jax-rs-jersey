@@ -2,9 +2,9 @@ package ci.pabeu.rs.rest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.enterprise.context.RequestScoped;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -29,6 +29,7 @@ import ci.pabeu.rs.helper.dto.transformer.UserTransformer;
 import ci.pabeu.rs.security.JWTTokenStore;
 
 @Path("/users")
+@RequestScoped
 public class UserRest {
 	
 	private HandleLanguage handleLanguage;
@@ -43,20 +44,18 @@ public class UserRest {
 		userRepository = new UserRepository();
 	}
 
-	@GET()
+	@GET
 	@Path("/")
 	@JWTTokenStore
 	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response getAll(@Context HttpServletRequest req) throws ParseException {
 		
-		List<Response> responses = new ArrayList<>();
 		List<UserDto> userDtos = UserTransformer.INSTANCE.toDtos(userRepository.findAll());
-		responses.addAll(userDtos);
 
-		return Response.status(Status.OK).entity(responses).build();
+		return Response.status(Status.OK).entity(userDtos).build();
 	}
 
-	@GET()
+	@GET
 	@Path("/{id}")
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	public UserDto get(@Context HttpServletRequest req, @PathParam(value = "id") Integer id) throws ParseException {
@@ -64,7 +63,7 @@ public class UserRest {
 		return UserTransformer.INSTANCE.toDto(userRepository.getOne(id));
 	}
 
-	@POST()
+	@POST
 	@Path("/create")
 	@JWTTokenStore
 	@Produces(value = { MediaType.APPLICATION_JSON })
@@ -74,7 +73,7 @@ public class UserRest {
 		return UserTransformer.INSTANCE.toDto(userRepository.save(UserTransformer.INSTANCE.toEntity(dto)));
 	}
 
-	@POST()
+	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response login(@Context HttpServletRequest req, @FormParam("userName") String userName,
@@ -100,7 +99,7 @@ public class UserRest {
 		}
 	}
 
-	@PUT()
+	@PUT
 	@Path("/{id}")
 	@JWTTokenStore
 	@Produces(value = { MediaType.APPLICATION_JSON })
