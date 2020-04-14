@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import ci.pabeu.rs.dao.entity.User;
 import ci.pabeu.rs.em.JpaEntityManager;
@@ -42,8 +43,18 @@ public class UserRepository implements BaseRepository<User, Integer> {
 		em.getTransaction().begin();
 		em.persist(user);
 		em.getTransaction().commit();
-		em.close();
 		return em.merge(user);
+	}
+
+	public User findByUserNameAndPassword(String userName, String password) {
+
+		TypedQuery<User> query = em.createQuery(
+				"SELECT u FROM User u WHERE u.userName = :userName AND u.password = :password", User.class);
+		query.setParameter("userName", userName);
+		query.setParameter("password", password);
+
+		return query.getSingleResult();
+
 	}
 
 }
