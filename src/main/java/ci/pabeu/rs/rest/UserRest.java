@@ -2,6 +2,7 @@ package ci.pabeu.rs.rest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,8 +49,11 @@ public class UserRest {
 	@Produces(value = {MediaType.APPLICATION_JSON})
 	public Response getAll(@Context HttpServletRequest req) throws ParseException {
 		
+		List<Response> responses = new ArrayList<>();
 		List<UserDto> userDtos = UserTransformer.INSTANCE.toDtos(userRepository.findAll());
-		return Response.ok().entity(userDtos).build();
+		responses.addAll(userDtos);
+
+		return Response.status(Status.OK).entity(responses).build();
 	}
 
 	@GET()
