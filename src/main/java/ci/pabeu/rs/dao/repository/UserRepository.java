@@ -70,7 +70,7 @@ public class UserRepository implements BaseRepository<User, Integer> {
 		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         String jwtToken = Jwts.builder()
 				.setSubject(userName).setIssuer(
-						path)
+						userName)
                 .setIssuedAt(new Date())
 				.setExpiration(Date.from((LocalDateTime.now().atZone(ZoneId.systemDefault()).plusMinutes(15L)
 						.toInstant())))
