@@ -1,8 +1,11 @@
 package ci.pabeu.rs.security;
 
+import static javax.security.enterprise.identitystore.CredentialValidationResult.INVALID_RESULT;
+
 import java.util.Arrays;
 import java.util.HashSet;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStore;
@@ -10,6 +13,7 @@ import javax.security.enterprise.identitystore.IdentityStore;
 import ci.pabeu.rs.dao.entity.User;
 import ci.pabeu.rs.dao.repository.UserRepository;
 
+@ApplicationScoped
 public class SecurityConfig implements IdentityStore {
 
 	private UserRepository userRepository;
@@ -24,7 +28,7 @@ public class SecurityConfig implements IdentityStore {
 		
 		User user  = this.userRepository.findByUserNameAndPassword(caller, password);
 		if (user == null) {
-			return CredentialValidationResult.INVALID_RESULT;
+			return INVALID_RESULT;
 		}
 
 		if (usernamePasswordCredential.compareTo(user.getUserName(), user.getPassword())) {
@@ -32,7 +36,7 @@ public class SecurityConfig implements IdentityStore {
 			return new CredentialValidationResult(caller, new HashSet<>(Arrays.asList("ADMIN")));
 		}
 
-		return CredentialValidationResult.INVALID_RESULT;
+		return INVALID_RESULT;
 	}
 
 }

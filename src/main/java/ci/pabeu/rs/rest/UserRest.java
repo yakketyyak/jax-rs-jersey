@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -25,6 +27,7 @@ import ci.pabeu.rs.helper.dto.UserDto;
 import ci.pabeu.rs.helper.dto.transformer.UserTransformer;
 
 @Path("/users")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "ADMIN"))
 public class UserRest {
 	
 	private HandleLanguage handleLanguage;

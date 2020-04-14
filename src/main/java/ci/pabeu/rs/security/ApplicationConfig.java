@@ -1,11 +1,10 @@
 package ci.pabeu.rs.security;
 
-import javax.inject.Named;
+import javax.enterprise.context.ApplicationScoped;
 import javax.security.enterprise.authentication.mechanism.http.BasicAuthenticationMechanismDefinition;
 
 @BasicAuthenticationMechanismDefinition(realmName = "file")
-
-@Named
+@ApplicationScoped
 public class ApplicationConfig {
 
 }
