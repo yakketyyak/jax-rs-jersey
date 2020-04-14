@@ -4,9 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.annotation.security.DeclareRoles;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -17,6 +17,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -24,10 +25,9 @@ import ci.pabeu.rs.dao.entity.User;
 import ci.pabeu.rs.dao.repository.UserRepository;
 import ci.pabeu.rs.helper.dto.UserDto;
 import ci.pabeu.rs.helper.dto.transformer.UserTransformer;
+import ci.pabeu.rs.security.JWTTokenStore;
 
 @Path("/users")
-//@ServletSecurity(@HttpConstraint(rolesAllowed = "ADMIN"))
-@DeclareRoles({ "ADMIN" })
 public class UserRest {
 	
 	private HandleLanguage handleLanguage;
@@ -44,6 +44,7 @@ public class UserRest {
 
 	@GET()
 	@Path("/")
+	@JWTTokenStore
 	@Produces(value = {MediaType.APPLICATION_JSON})
 	public List<UserDto> getAll(@Context HttpServletRequest req) throws ParseException {
 		
@@ -60,6 +61,7 @@ public class UserRest {
 
 	@POST()
 	@Path("/create")
+	@JWTTokenStore
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	@Consumes(value = { MediaType.APPLICATION_JSON })
 	public UserDto create(@Context HttpServletRequest req, UserDto dto) throws ParseException {
@@ -67,8 +69,35 @@ public class UserRest {
 		return UserTransformer.INSTANCE.toDto(userRepository.save(UserTransformer.INSTANCE.toEntity(dto)));
 	}
 
+	@POST()
+	@Path("/login")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public Response login(@Context HttpServletRequest req, @FormParam("userName") String userName,
+			@FormParam("password") String password)
+			throws ParseException {
+
+		try {
+
+			// Authenticate the user using the credentials provided
+			User user = this.userRepository.findByUserNameAndPassword(userName, password);
+			if (user == null) {
+				return Response.status(Status.UNAUTHORIZED).build();
+			}
+
+			// Issue a token for the user
+			String token = this.userRepository.issueToken(userName, req.getPathInfo());
+
+			// Return the token on the response
+			return Response.ok().header("Authorization", "Bearer " + token).build();
+
+		} catch (Exception e) {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+	}
+
 	@PUT()
 	@Path("/{id}")
+	@JWTTokenStore
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	@Consumes(value = { MediaType.APPLICATION_JSON })
 	public UserDto update(@Context HttpServletRequest req, @PathParam(value = "id") Integer id, UserDto dto)
