@@ -20,7 +20,7 @@ import io.jsonwebtoken.security.Keys;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 @ApplicationScoped
-public class JWTTokenStoreFilter implements ContainerRequestFilter {
+public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
