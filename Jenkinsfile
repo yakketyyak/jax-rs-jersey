@@ -31,7 +31,7 @@ pipeline {
         artifactId = readMavenPom().getArtifactId()
         version = readMavenPom().getVersion()
         packaging = readMavenPom().getPackaging()
-        tomcatUrl = 'http://192.168.1.111:8888/'
+        tomcatUrl = 'http://localhost:8084/'
       }
 	steps {
             deploy (
