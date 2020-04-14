@@ -32,15 +32,10 @@ import ci.pabeu.rs.security.JWTTokenStore;
 @Path("/users")
 public class UserRest {
 	
-	private HandleLanguage handleLanguage;
 	
 	private UserRepository userRepository;
 
-	private I18nConfig i18nConfig;
-
 	public UserRest() {
-		handleLanguage = new HandleLanguage();
-		i18nConfig = new I18nConfig();
 		userRepository = new UserRepository();
 	}
 

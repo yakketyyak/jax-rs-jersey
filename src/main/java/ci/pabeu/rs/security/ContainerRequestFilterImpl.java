@@ -1,16 +1,15 @@
 package ci.pabeu.rs.security;
 
-import java.io.IOException;
 import java.security.Key;
 
 import javax.annotation.Priority;
-import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.Priorities;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
+
+import com.sun.jersey.spi.container.ContainerRequest;
+import com.sun.jersey.spi.container.ContainerRequestFilter;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,13 +18,20 @@ import io.jsonwebtoken.security.Keys;
 @JWTTokenStore
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-@ApplicationScoped
 public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 
 	@Override
-	public void filter(ContainerRequestContext requestContext) throws IOException {
-		// Get the HTTP Authorization header from the request
-		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+	public ContainerRequest filter(ContainerRequest request) {
+
+		String authorizationHeader = request.getHeaderValue("authorization");
+
+		if (request.getAbsolutePath().getPath().endsWith("/users/login")) {
+			return request;
+		}
+
+		if (authorizationHeader == null) {
+			throw new WebApplicationException(Status.UNAUTHORIZED);
+		}
 
 		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 		// Extract the token from the HTTP Authorization header
@@ -37,10 +43,10 @@ public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 
 		} catch (Exception e) {
-
-			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
+			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
+		return request;
 	}
 
 }
