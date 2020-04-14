@@ -41,7 +41,6 @@ public class UserRest {
 
 	@GET
 	@Path("/")
-	@JWTTokenStore
 	@Produces(value = {MediaType.APPLICATION_JSON})
 	public List<UserDto> getAll(@Context HttpServletRequest req,
 			@Context SecurityContext securityContext)
