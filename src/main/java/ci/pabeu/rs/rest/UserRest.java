@@ -46,9 +46,10 @@ public class UserRest {
 	@Path("/")
 	@JWTTokenStore
 	@Produces(value = {MediaType.APPLICATION_JSON})
-	public List<UserDto> getAll(@Context HttpServletRequest req) throws ParseException {
+	public Response getAll(@Context HttpServletRequest req) throws ParseException {
 		
-		return UserTransformer.INSTANCE.toDtos(userRepository.findAll());
+		List<UserDto> userDtos = UserTransformer.INSTANCE.toDtos(userRepository.findAll());
+		return Response.ok().entity(userDtos).build();
 	}
 
 	@GET()
