@@ -3,6 +3,7 @@ package ci.pabeu.rs.dao.repository;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery;
 
 import ci.pabeu.rs.dao.entity.User;
 import ci.pabeu.rs.em.JpaEntityManager;
+import ci.pabeu.rs.security.ConfigProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -20,13 +22,14 @@ public class UserRepository implements BaseRepository<User, Integer> {
 
 	private JpaEntityManager jpa;
 
-
+	private ConfigProperties configProperties;
 
 	private EntityManager em;
 
 	public UserRepository() {
 		jpa = new JpaEntityManager();
 		em = jpa.getEntityManager();
+		configProperties = new ConfigProperties();
 	}
 
 
@@ -67,7 +70,14 @@ public class UserRepository implements BaseRepository<User, Integer> {
 	}
 
 	public String issueToken(String userName, String path) {
-		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+		/*
+		 * Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512); String encodedKey =
+		 * Base64.getEncoder().encodeToString(key.getEncoded());
+		 * System.out.println("encodedKey " + encodedKey);
+		 */
+		byte[] decodedKey = Base64.getDecoder().decode(configProperties.getSecret());
+		Key key = Keys.hmacShaKeyFor(decodedKey);
+
         String jwtToken = Jwts.builder()
 				.setSubject(userName).setIssuer(
 						userName)

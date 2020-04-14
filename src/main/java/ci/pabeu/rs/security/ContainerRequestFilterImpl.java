@@ -1,6 +1,7 @@
 package ci.pabeu.rs.security;
 
 import java.security.Key;
+import java.util.Base64;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -12,13 +13,18 @@ import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 @JWTTokenStore
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class ContainerRequestFilterImpl implements ContainerRequestFilter {
+
+	private ConfigProperties configProperties;
+
+	public ContainerRequestFilterImpl() {
+		configProperties = new ConfigProperties();
+	}
 
 	@Override
 	public ContainerRequest filter(ContainerRequest request) {
@@ -33,12 +39,12 @@ public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
-		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 		// Extract the token from the HTTP Authorization header
 		String token = authorizationHeader.substring("Bearer".length()).trim();
 
 		try {
-
+			byte[] decodedKey = Base64.getDecoder().decode(configProperties.getSecret());
+			Key key = Keys.hmacShaKeyFor(decodedKey);
 			// Validate the token
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 
