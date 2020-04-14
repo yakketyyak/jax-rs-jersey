@@ -24,7 +24,7 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
 	public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response,
 			HttpMessageContext httpMessageContext) throws AuthenticationException {
 
-		String name = request.getParameter("name");
+		String name = request.getParameter("caller");
 		String password = request.getParameter("password");
 
 		if (name != null && password != null) {
@@ -41,11 +41,9 @@ public class AuthenticationMechanism implements HttpAuthenticationMechanism {
 				// this method.
 				return httpMessageContext.notifyContainerAboutLogin(result.getCallerPrincipal(),
 						result.getCallerGroups());
-			} else {
-				return httpMessageContext.responseUnauthorized();
 			}
 		}
-		return httpMessageContext.doNothing();
+		return httpMessageContext.responseUnauthorized();
 
 	}
 

@@ -14,11 +14,11 @@ import ci.pabeu.rs.dao.entity.User;
 import ci.pabeu.rs.dao.repository.UserRepository;
 
 @ApplicationScoped
-public class SecurityConfig implements IdentityStore {
+public class IdentityStoreImpl implements IdentityStore {
 
 	private UserRepository userRepository;
 
-	public SecurityConfig() {
+	public IdentityStoreImpl() {
 		userRepository = new UserRepository();
 	}
 
