@@ -14,19 +14,25 @@ version="3.1">
   </welcome-file-list>
   
   <servlet>
-  <servlet-name>Jersey REST Service</servlet-name>
-   <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-     <!-- Register resources and providers under com.prom.via.rest.dto package. -->
-    <init-param>
-        <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>ci.pabeu.rs.helper.dto</param-value>
-    </init-param>
-  </servlet>
-   
-  <servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		 <init-param>
+        <param-name>com.sun.jersey.config.property.packages</param-name>
+        <param-value>ci.pabeu.rs.rest</param-value>
+   		 </init-param>
+   		 <init-param>
+        <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+        <param-value>ci.pabeu.rs.security.ContainerRequestFilterImpl</param-value>
+   
+    </init-param>
+    <!-- Enable Tracing support. -->
+        <init-param>
+            <param-name>com.sun.jersey.config.server.tracing</param-name>
+            <param-value>ALL</param-value>
+        </init-param>
+   		
 		<load-on-startup>1</load-on-startup>
+		
  </servlet>
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>

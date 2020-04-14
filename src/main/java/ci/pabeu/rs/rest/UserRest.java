@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -31,7 +30,6 @@ import ci.pabeu.rs.response.Result;
 import ci.pabeu.rs.security.JWTTokenStore;
 
 @Path("/users")
-@RequestScoped
 public class UserRest {
 	
 	private HandleLanguage handleLanguage;
