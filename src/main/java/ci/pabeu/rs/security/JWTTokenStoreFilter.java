@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Key;
 
 import javax.annotation.Priority;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -15,9 +16,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-@Provider
 @JWTTokenStore
+@Provider
 @Priority(Priorities.AUTHENTICATION)
+@ApplicationScoped
 public class JWTTokenStoreFilter implements ContainerRequestFilter {
 
 	@Override

@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -26,6 +27,7 @@ import ci.pabeu.rs.dao.entity.User;
 import ci.pabeu.rs.dao.repository.UserRepository;
 import ci.pabeu.rs.helper.dto.UserDto;
 import ci.pabeu.rs.helper.dto.transformer.UserTransformer;
+import ci.pabeu.rs.response.Result;
 import ci.pabeu.rs.security.JWTTokenStore;
 
 @Path("/users")
@@ -48,11 +50,11 @@ public class UserRest {
 	@Path("/")
 	@JWTTokenStore
 	@Produces(value = {MediaType.APPLICATION_JSON})
-	public Response getAll(@Context HttpServletRequest req) throws ParseException {
+	public List<UserDto> getAll(@Context HttpServletRequest req,
+			@Context SecurityContext securityContext)
+			throws ParseException {
 		
-		List<UserDto> userDtos = UserTransformer.INSTANCE.toDtos(userRepository.findAll());
-
-		return Response.status(Status.OK).entity(userDtos).build();
+		return UserTransformer.INSTANCE.toDtos(userRepository.findAll());
 	}
 
 	@GET
@@ -92,7 +94,7 @@ public class UserRest {
 			String token = this.userRepository.issueToken(userName, req.getPathInfo());
 
 			// Return the token on the response
-			return Response.ok().header("Authorization", "Bearer " + token).build();
+			return Response.ok(new Result(token)).build();
 
 		} catch (Exception e) {
 			return Response.status(Status.UNAUTHORIZED).build();
