@@ -21,7 +21,6 @@ import io.jsonwebtoken.security.Keys;
 public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 
 	private ConfigProperties configProperties;
-
 	public ContainerRequestFilterImpl() {
 		configProperties = new ConfigProperties();
 	}
