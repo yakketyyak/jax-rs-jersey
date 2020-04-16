@@ -27,7 +27,7 @@ import ci.pabeu.rs.dao.repository.UserRepository;
 import ci.pabeu.rs.helper.dto.UserDto;
 import ci.pabeu.rs.helper.dto.transformer.UserTransformer;
 import ci.pabeu.rs.response.Result;
-import ci.pabeu.rs.security.JWTTokenStore;
+import ci.pabeu.rs.security.Secured;
 
 @Path("/users")
 public class UserRest {
@@ -41,7 +41,7 @@ public class UserRest {
 
 	@GET
 	@Path("/")
-	@JWTTokenStore
+	@Secured
 	@Produces(value = {MediaType.APPLICATION_JSON})
 	public List<UserDto> getAll(@Context HttpServletRequest req,
 			@Context SecurityContext securityContext)
@@ -52,6 +52,7 @@ public class UserRest {
 
 	@GET
 	@Path("/{id}")
+	@Secured
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	public UserDto get(@Context HttpServletRequest req, @PathParam(value = "id") Integer id) throws ParseException {
 
@@ -60,7 +61,7 @@ public class UserRest {
 
 	@POST
 	@Path("/create")
-	@JWTTokenStore
+	@Secured
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	@Consumes(value = { MediaType.APPLICATION_JSON })
 	public UserDto create(@Context HttpServletRequest req, UserDto dto) throws ParseException {
@@ -69,9 +70,10 @@ public class UserRest {
 	}
 
 	@POST
-	@Path("/login")
+	@Path("/auth/token")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response login(@Context HttpServletRequest req, @FormParam("userName") String userName,
+	public Response auth(@Context HttpServletRequest req,
+			@FormParam("userName") String userName,
 			@FormParam("password") String password)
 			throws ParseException {
 
@@ -96,7 +98,7 @@ public class UserRest {
 
 	@PUT
 	@Path("/{id}")
-	@JWTTokenStore
+	@Secured
 	@Produces(value = { MediaType.APPLICATION_JSON })
 	@Consumes(value = { MediaType.APPLICATION_JSON })
 	public UserDto update(@Context HttpServletRequest req, @PathParam(value = "id") Integer id, UserDto dto)

@@ -82,7 +82,8 @@ public class UserRepository implements BaseRepository<User, Integer> {
 				.setSubject(userName).setIssuer(
 						userName)
                 .setIssuedAt(new Date())
-				.setExpiration(Date.from((LocalDateTime.now().atZone(ZoneId.systemDefault()).plusMinutes(15L)
+				.setExpiration(Date.from((LocalDateTime.now().atZone(ZoneId.systemDefault())
+						.plusMinutes(5L)
 						.toInstant())))
 				.signWith(key, SignatureAlgorithm.HS512)
                 .compact();
