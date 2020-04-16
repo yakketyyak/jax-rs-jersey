@@ -46,7 +46,8 @@ public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 		String token = authorizationHeader.get().substring(BEARER.length()).trim();
 
 		try {
-			byte[] decodedKey = Base64.getDecoder().decode(configProperties.getSecret());
+			byte[] decodedKey = Base64.getDecoder()
+					.decode(configProperties.loadProperties("app.properties").getProperty("secret"));
 			Key key = Keys.hmacShaKeyFor(decodedKey);
 			// Validate the token
 			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

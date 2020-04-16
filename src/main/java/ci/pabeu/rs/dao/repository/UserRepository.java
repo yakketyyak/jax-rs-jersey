@@ -1,5 +1,6 @@
 package ci.pabeu.rs.dao.repository;
 
+import java.io.IOException;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -69,13 +70,14 @@ public class UserRepository implements BaseRepository<User, Integer> {
 
 	}
 
-	public String issueToken(String userName, String path) {
+	public String issueToken(String userName, String path) throws IOException {
 		/*
 		 * Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512); String encodedKey =
 		 * Base64.getEncoder().encodeToString(key.getEncoded());
 		 * System.out.println("encodedKey " + encodedKey);
 		 */
-		byte[] decodedKey = Base64.getDecoder().decode(configProperties.getSecret());
+		byte[] decodedKey = Base64.getDecoder()
+				.decode(configProperties.loadProperties("app.properties").getProperty("secret"));
 		Key key = Keys.hmacShaKeyFor(decodedKey);
 
         String jwtToken = Jwts.builder()
