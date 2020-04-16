@@ -57,9 +57,6 @@ public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 		} catch (Exception e) {
 			requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
 		}
-
-		requestContext.abortWith(Response.status(Response.Status.OK).build());
-
 	}
 
 }
