@@ -15,19 +15,24 @@ version="3.1">
   
   <servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-		 <init-param>
-        <param-name>com.sun.jersey.config.property.packages</param-name>
-        <param-value>ci.pabeu.rs.rest</param-value>
-   		 </init-param>
-   		 <init-param>
-        <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
-        <param-value>ci.pabeu.rs.security.ContainerRequestFilterImpl</param-value>
-   
-    </init-param>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<!-- Register JAX-RS Application, if needed. -->
+        <!--<init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>ci.pabeu.rs.rest.ResConfig</param-value>
+        </init-param>-->
+		<!-- Register resources and providers under my.package. -->
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>ci.pabeu.rs.rest</param-value>
+        </init-param>
+   		<init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>ci.pabeu.rs.security.ContainerRequestFilterImpl</param-value>
+        </init-param>
     <!-- Enable Tracing support. -->
         <init-param>
-            <param-name>com.sun.jersey.config.server.tracing</param-name>
+            <param-name>jersey.config.server.tracing</param-name>
             <param-value>ALL</param-value>
         </init-param>
    		
