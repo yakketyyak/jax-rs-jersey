@@ -3,7 +3,7 @@ package ci.pabeu.rs.rest;
 import java.io.Serializable;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.container.ContainerRequestContext;
 
 public class HandleLanguage implements Serializable {
 
@@ -14,15 +14,14 @@ public class HandleLanguage implements Serializable {
 
 	private static String defaultLanguage = "fr";
 
-	public Locale getLang(HttpServletRequest req) {
+	public void setLocale(ContainerRequestContext req) {
 
-		Locale locale = req.getLocale();
+		Locale locale = req.getLanguage();
 		if (locale == null) {
 			locale = new Locale(defaultLanguage);
 		}
 
 		Locale.setDefault(locale);
-		return locale;
 	}
 
 }

@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.Provider;
 
+import ci.pabeu.rs.rest.HandleLanguage;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -27,9 +28,11 @@ import io.jsonwebtoken.security.Keys;
 public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 
 	private ConfigProperties configProperties;
+	private HandleLanguage handleLanguage;
 	private static final String BEARER = "Bearer";
 	public ContainerRequestFilterImpl() {
 		configProperties = new ConfigProperties();
+		handleLanguage = new HandleLanguage();
 	}
 
 
@@ -44,10 +47,10 @@ public class ContainerRequestFilterImpl implements ContainerRequestFilter {
 
 		// Extract the token from the HTTP Authorization header
 		String token = authorizationHeader.get().substring(BEARER.length()).trim();
-
+		this.handleLanguage.setLocale(requestContext);
 		try {
 			byte[] decodedKey = Base64.getDecoder()
-					.decode(configProperties.loadProperties("app.properties").getProperty("secret"));
+					.decode(this.configProperties.loadProperties("app.properties").getProperty("secret"));
 			Key key = Keys.hmacShaKeyFor(decodedKey);
 			// Validate the token
 			Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
