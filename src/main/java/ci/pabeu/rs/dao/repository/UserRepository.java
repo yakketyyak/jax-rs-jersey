@@ -19,6 +19,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+
 public class UserRepository implements BaseRepository<User, Integer> {
 
 	private JpaEntityManager jpa;
