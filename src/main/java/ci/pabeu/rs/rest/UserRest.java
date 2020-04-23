@@ -4,9 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -34,8 +32,7 @@ import ci.pabeu.rs.security.Secured;
 @Path("/users")
 public class UserRest {
 	
-	
-	private DataSource dataSource;
+
 
 	private UserRepository userRepository;
 
@@ -83,9 +80,7 @@ public class UserRest {
 			throws ParseException {
 
 		try {
-			System.out.println("datasource " + dataSource);
-			InitialContext initialCtxt = new InitialContext();
-			dataSource = (DataSource) initialCtxt.lookup("java:comp/env/jdbc/appDatasource");
+
 			// Authenticate the user using the credentials provided
 			User user = this.userRepository.findByUserNameAndPassword(userName, password);
 			if (user == null) {
