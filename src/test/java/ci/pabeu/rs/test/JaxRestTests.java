@@ -6,6 +6,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -34,7 +35,7 @@ public class JaxRestTests extends JerseyTest {
 				"$2y$12$qt.NAUEFGTaodTap/k5eoe.De60vYimtO3XgUrABjWmtm/HmAe8Jm");
 		Response response = target("users/auth/token").request().post(Entity.form(form));
 		Assert.assertTrue(response.getEntity().getClass() == Result.class);
-		Assert.assertTrue(200 == response.getStatus());
+		Assert.assertTrue(Status.OK.getStatusCode() == response.getStatus());
 
 	}
 
