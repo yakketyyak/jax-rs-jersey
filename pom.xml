@@ -13,7 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<hibernate.version>4.0.1.Final</hibernate.version>
 		<mapstruct.processor.version>1.3.0.Final</mapstruct.processor.version>
-		<mysql.version>5.1.6</mysql.version>
+		<mysql.version>8.0.16</mysql.version>
 		<jwt.version>0.11.1</jwt.version>
 		<jersey.version>1.19.4</jersey.version>
 	</properties>
